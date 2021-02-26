@@ -55,7 +55,7 @@
         //If there is not any error
         if(empty($username_err) && empty($password_err))
         {
-            $sql = "SELECT id,username,password FROM users WHERE username=?";
+            $sql = "SELECT id,username,password,status FROM users WHERE username=?";
             $stmt = mysqli_prepare($conn, $sql);
             if ($stmt)
             {
@@ -70,17 +70,23 @@
                     mysqli_stmt_store_result($stmt);
                     if(mysqli_stmt_num_rows($stmt) == 1)
                     {
-                        mysqli_stmt_bind_result($stmt,$id,$username,$hashed_password);
+                        mysqli_stmt_bind_result($stmt,$id,$username,$hashed_password,$status);
                         if(mysqli_stmt_fetch($stmt))
                         {
                             //Verifying password
                             if(password_verify($password,$hashed_password))
                             {
+                                if($status=="active")
+                                {
+                                session_destroy();
                                 session_start();
                                 $_SESSION["username"] = $username;
                                 $_SESSION["id"] = $id;
                                 $_SESSION["loggedin"] = true;
                                 header("location:welcome.php");
+                                }
+                                else
+                                $_SESSION['msg']="Please activate your account first";
                             }
                             else
                             {
@@ -123,52 +129,77 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    <link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="styles/register.css?v=<?php echo time(); ?>">
     <title>MYAPP</title>
+    <style type="text/css">
+
+        input{
+            height:3rem;
+        }
+        i{
+            padding-top:1.2rem;
+        }
+
+    </style>
   </head>
   
   <body>
     
 
-    <div class="container mt-4">
-            <h2 style="text-align:center;margin-bottom:2rem">Welcome Again To MyAPP</h3>
-            <h3>Please Login Here: </h3>
-            <hr>
-        <form action="" method="post">
-            <div class="form-group">
-                <label for="inputEmail4">Username</label>
-                <input type="text" class="form-control" name="username" id="inputEmail4" placeholder="Username">
-            </div>
-            <div class="form-group">
-                <label for="inputPassword4">Password</label>
-                <input type="password" class="form-control" name ="password" id="inputPassword4" placeholder="Password">
-            </div> 
-            <div style="text-align:center">
-                <button type="submit" class="btn btn-primary">Login</button>
-            </div>
-            <h4 style="text-align:center;margin-top:1rem">Not registered yet then register <a href="register.php">here</a></h4>
-        </form>
-        <?php if (isset($_SESSION['errors'])): ?>
-            <div style="width:100%">
-                <div class="alert alert-danger alert-dismissible fade show" style="margin:0px auto;text-align:center;width:70%" role="alert">
-                    <?php echo $_SESSION['errors'] ?>
-                    <button style="border:none"   data-bs-dismiss="alert" aria-label="Close">X</button>
+  <div class="main">
+        <img class="background" src="images/wave.png">
+
+        <div class="leftside">
+            <img class="leftimage" src="images/bg.svg">
+        </div>
+
+        <div class="rightside">
+            <form class="form" action="" method="post">
+                <div class="usericon">
+                    <img class="avatar" src="images/avatar.svg">
+                    
+                    <div class="caption">Welcome Again</div>
+                    
+                    <?php if (isset($_SESSION['errors'])): ?>
+                            <div class="err">
+                                <?php echo $_SESSION['errors'] ?>
+                            </div>
+                    <?php endif; ?>
+                    <?php if (isset($_SESSION['msg'])): ?>
+                            <div class="register_msg">
+                                <?php echo $_SESSION['msg'] ?>
+                            </div>
+                    <?php endif; ?>
                 </div>
-            </div>
-        <?php endif; ?>
+
+                <div class="inp username">
+                    <i class="fas fa-user"></i>
+                    <input type="text" name="username" id="inputUsername" placeholder="Username">
+                </div>
+
+                <div class="inp password">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" name="password" id="inputPassword" placeholder="Password">
+                </div>
+                
+
+                <div class="submit-btn">
+                    <button type="submit" class="btn">Login</button>
+                </div>
+                <div class="option">
+                    <a href="resetpassword.php">Forgot Password ?</a>
+                </div>        
+                <div class="option">
+                    Don't have an account yet? <a href="register.php">Create One</a>
+                </div>
+
+            </form>
+        </div>
     </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
   </body>
 </html>

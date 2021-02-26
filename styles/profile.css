@@ -1,0 +1,77 @@
+body{
+    margin:0;
+    padding: 0;
+    font-family:poppins;
+}
+nav{
+    background-color: #44ad6a;
+    color:white;
+    font-weight: 600;
+    box-shadow: 1px 3px 14px 0px rgba(29,179,22,0.75);
+    -webkit-box-shadow: 1px 3px 14px 0px rgba(29,179,22,0.75);
+    -moz-box-shadow: 1px 3px 14px 0px rgba(29,179,22,0.75);
+}
+.navbar-brand{
+    color:white;
+}
+.nav-link{
+    color:white;
+}
+.dropdown{
+    font-weight: 600;
+}
+.dropdown-item{
+    font-weight: 600;
+}
+.main{
+    width: 100%;
+    display: flex;
+}
+.leftside{
+    width:40%;
+    padding:2rem;
+    padding-right: 0;
+    padding-top: 3rem;
+}
+.img_card{
+    width:45%;
+    height:12rem;
+    margin :0px auto;
+    box-shadow: 1px 3px 14px 0px lightgrey;
+    -webkit-box-shadow: 1px 3px 14px 0px lightgrey;
+    -moz-box-shadow: 1px 3px 14px 0px lightgrey;
+    
+}
+.image{
+    width:100%;
+    height: 100%;
+    
+}
+.username{
+    text-align: center;
+    font-weight: 600;
+    margin-top:2rem;
+    font-size: 1.7rem;
+}
+.rightside{
+    width:60%;
+    padding-top:3rem;
+    padding-right: 2rem;
+}
+.detail_card{
+    border-radius: 1rem;
+    padding:2rem;
+    box-shadow: 1px 3px 14px 0px lightgrey;
+    -webkit-box-shadow: 1px 3px 14px 0px lightgrey;
+    -moz-box-shadow: 1px 3px 14px 0px lightgrey;
+}
+.label{
+    font-weight: 600;
+    font-size: 1.3rem;
+    padding:1rem;
+}
+.response{
+    font-weight: 400;
+    font-size: 1.3rem;
+    padding:1rem;
+}
